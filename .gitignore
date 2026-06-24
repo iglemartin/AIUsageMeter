@@ -1,0 +1,32 @@
+# --- Claude Code / local config (do not distribute) ---
+.claude/
+.claude/settings.local.json
+
+# --- Credentials and sensitive data (safety net: never commit) ---
+# The widget reads the token at runtime from ~/.claude/.credentials.json,
+# which is NOT part of the repo. These rules prevent committing credentials by
+# accident if they ever get copied into the project directory.
+*.credentials.json
+.credentials.json*
+*credentials*.json
+*.widgetbak
+*.token
+secrets*
+.env
+.env.*
+
+# --- Operating-system cruft ---
+.DS_Store
+Thumbs.db
+
+# --- Editors / IDEs ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# --- Test artifacts ---
+_test_*.qml
+test_*.qml
+*.plasmoid

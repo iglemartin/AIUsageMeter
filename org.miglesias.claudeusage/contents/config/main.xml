@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+                          http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+    <kcfgfile name=""/>
+    <group name="General">
+        <entry name="refreshInterval" type="Int">
+            <label>Refresh interval in seconds</label>
+            <default>300</default>
+            <min>30</min>
+            <max>3600</max>
+        </entry>
+        <entry name="panelMetric" type="String">
+            <label>Metric shown in the panel</label>
+            <default>five_hour</default>
+        </entry>
+        <entry name="panelStyle" type="String">
+            <label>Indicator style: bar (horizontal bar) or ring</label>
+            <default>bar</default>
+        </entry>
+        <entry name="showBar" type="Bool">
+            <label>Show the progress bar in the panel</label>
+            <default>true</default>
+        </entry>
+        <entry name="showPercent" type="Bool">
+            <label>Show the percentage in the panel</label>
+            <default>true</default>
+        </entry>
+        <entry name="showReset" type="Bool">
+            <label>Show the time until reset in the panel</label>
+            <default>true</default>
+        </entry>
+        <entry name="useThresholdColors" type="Bool">
+            <label>Use threshold alert colors instead of Claude orange</label>
+            <default>false</default>
+        </entry>
+        <entry name="showRemaining" type="Bool">
+            <label>Show the remaining percentage instead of used</label>
+            <default>false</default>
+        </entry>
+        <entry name="warnThreshold" type="Int">
+            <label>Warning threshold (amber)</label>
+            <default>70</default>
+            <min>0</min>
+            <max>100</max>
+        </entry>
+        <entry name="critThreshold" type="Int">
+            <label>Critical threshold (red)</label>
+            <default>90</default>
+            <min>0</min>
+            <max>100</max>
+        </entry>
+        <entry name="autoRefreshToken" type="Bool">
+            <label>Automatically renew the token and rewrite the credentials</label>
+            <default>true</default>
+        </entry>
+    </group>
+</kcfg>

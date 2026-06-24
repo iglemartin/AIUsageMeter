@@ -1,0 +1,20 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "https://github.com/iglemartin",
+                "Name": "iglemartin"
+            }
+        ],
+        "Category": "System Information",
+        "Description": "Shows your Claude account usage (5-hour and weekly limits) and the time until the next reset.",
+        "Icon": "utilities-system-monitor",
+        "Id": "org.miglesias.claudeusage",
+        "License": "MIT",
+        "Name": "Claude Usage",
+        "Version": "1.0.0"
+    },
+    "X-Plasma-API-Minimum-Version": "6.0",
+    "X-Plasma-MainScript": "ui/main.qml"
+}

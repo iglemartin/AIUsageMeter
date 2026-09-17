@@ -31,6 +31,7 @@ next reset. It docks into any bar, just like the clock or the weather.
 - [Project structure](#project-structure)
 - [Development and testing](#development-and-testing)
 - [License](#license)
+- [Support](#support)
 
 ## What it shows
 
@@ -74,7 +75,11 @@ recovers on its own the next time you use Claude Code.
   with **your own** credential.
 - The token is **never** copied into the repo or logged: it's read at runtime from
   `~/.claude/.credentials.json`, which is not part of this project.
+- The token is never passed on a command line (so other local users can't see it with
+  `ps`), and only HTTPS calls to `api.anthropic.com` are made.
 - No telemetry, no analytics, no intermediate servers.
+
+Found a security issue? Please report it privately — see [SECURITY.md](SECURITY.md).
 
 ## Requirements
 
@@ -147,6 +152,7 @@ org.miglesias.claudeusage/
 ├── metadata.json
 └── contents/
     ├── code/usage.sh          # reads token, refreshes if needed, queries /usage → JSON
+    ├── code/links.js          # author contact and donation links
     ├── config/{main.xml,config.qml}
     └── ui/
         ├── main.qml            # plasmoid: compact (ring/bar) + popup + context menu
@@ -170,4 +176,8 @@ Contributions are welcome: open an issue or a PR.
 
 ## License
 
-[MIT](LICENSE) © [iglemartin](https://github.com/iglemartin)
+[MIT](LICENSE) © [iglemartin](https://github.com/iglemartin) · <martin.igle@gmail.com>
+
+## Support
+
+If you find the widget useful, you can [buy me a coffee ☕](https://buymeacoffee.com/iglemartin). There is also a link in the widget's **About** window and in its settings.

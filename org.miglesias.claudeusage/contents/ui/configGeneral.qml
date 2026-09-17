@@ -15,12 +15,16 @@ Kirigami.FormLayout {
     property alias cfg_showBar: showBarCheck.checked
     property alias cfg_showPercent: showPercentCheck.checked
     property alias cfg_showReset: showResetCheck.checked
+    property alias cfg_fontSize: fontSizeSpin.value
+    property alias cfg_fontBold: fontBoldCheck.checked
 
     // String ComboBoxes: handled manually
     property string cfg_panelMetric
     property string cfg_panelMetricDefault: "five_hour"
     property string cfg_panelStyle
     property string cfg_panelStyleDefault: "bar"
+    property string cfg_fontFamily
+    property string cfg_fontFamilyDefault: ""
 
     QQC2.SpinBox {
         id: refreshSpin
@@ -82,6 +86,56 @@ Kirigami.FormLayout {
         id: remainingCheck
         Kirigami.FormData.label: i18n("Displayed value:")
         text: i18n("Show % remaining instead of used")
+    }
+
+    Item { Kirigami.FormData.isSection: true }
+
+    QQC2.ComboBox {
+        id: fontCombo
+        Kirigami.FormData.label: i18n("Font:")
+        Layout.maximumWidth: Kirigami.Units.gridUnit * 16
+        // index 0 = system font; the rest are the installed families
+        model: [i18n("System default")].concat(Qt.fontFamilies())
+        onActivated: page.cfg_fontFamily = currentIndex === 0 ? "" : currentText
+        Component.onCompleted: {
+            var idx = page.cfg_fontFamily.length > 0 ? find(page.cfg_fontFamily) : 0;
+            currentIndex = Math.max(0, idx);
+        }
+        delegate: QQC2.ItemDelegate {
+            width: ListView.view ? ListView.view.width : implicitWidth
+            text: modelData
+            font.family: index === 0 ? Kirigami.Theme.defaultFont.family : modelData
+            highlighted: fontCombo.highlightedIndex === index
+        }
+    }
+
+    QQC2.SpinBox {
+        id: fontSizeSpin
+        Kirigami.FormData.label: i18n("Panel text size:")
+        from: 0
+        to: 72
+        stepSize: 1
+        textFromValue: function (value) {
+            return value === 0 ? i18n("Automatic") : i18n("%1 pt", value);
+        }
+        valueFromText: function (text) {
+            var v = parseInt(text);
+            return isNaN(v) ? 0 : v;
+        }
+    }
+
+    QQC2.CheckBox {
+        id: fontBoldCheck
+        text: i18n("Bold")
+    }
+
+    QQC2.Label {
+        Layout.fillWidth: true
+        Layout.maximumWidth: Kirigami.Units.gridUnit * 22
+        wrapMode: Text.WordWrap
+        opacity: 0.7
+        font.pixelSize: Kirigami.Theme.smallFont.pixelSize
+        text: i18n("The font applies to the panel and the popup. The size only affects the panel text; \"Automatic\" fits it to the panel height.")
     }
 
     Item { Kirigami.FormData.isSection: true }

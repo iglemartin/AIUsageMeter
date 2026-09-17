@@ -41,7 +41,7 @@ next reset. It docks into any bar, just like the clock or the weather.
   thresholds.
 - **On click (popup):** the two windows (5 h and 7 days) with a ring, % free, a countdown to
   the reset, a refresh button and the time of the last reading.
-- **Right-click:** "Refresh now", toggle 5 h / weekly, and "Configure…".
+- **Right-click:** "Refresh now", toggle 5 h / weekly, "About Claude Usage…" and "Configure…".
 
 ## How it gets the data
 
@@ -135,6 +135,9 @@ Right-click the widget → **Configure…**
 | Use alert colors | off | Green/amber/red traffic light instead of Claude orange. |
 | Warning (amber) | 70 % | Amber threshold (if alert colors are enabled). |
 | Critical (red) | 90 % | Red threshold (if alert colors are enabled). |
+| Font | System default | Font family for the panel and the popup. |
+| Panel text size | Automatic | Size in points of the panel text (`Automatic` fits it to the panel height). |
+| Bold | on | Bold text in the panel. |
 | Renew the token | on | Renew and rewrite credentials on expiry. |
 
 ## Project structure
@@ -150,6 +153,7 @@ org.miglesias.claudeusage/
         ├── UsageRing.qml       # progress ring (Canvas)
         ├── UsageBar.qml        # horizontal progress bar
         ├── UsageCard.qml       # per-window card in the popup
+        ├── AboutDialog.qml     # "About" window (data from metadata.json)
         └── configGeneral.qml   # settings page
 ```
 

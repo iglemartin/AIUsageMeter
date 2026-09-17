@@ -17,6 +17,9 @@ Item {
     property bool showLabel: true
     property bool showBar: true
     property real barLength: Kirigami.Units.gridUnit * 4
+    property string fontFamily: ""               // "" = system font
+    property int fontPointSize: 0                // 0 = automatic (fits the height)
+    property bool fontBold: true
 
     implicitWidth: row.implicitWidth
     implicitHeight: Math.round(Kirigami.Units.gridUnit * 1.2)
@@ -58,8 +61,18 @@ Item {
             Layout.alignment: Qt.AlignVCenter
             text: bar.label
             color: bar.textColor
-            font.bold: true
-            font.pixelSize: Math.max(8, Math.round(bar.height * 0.5))
+            // single binding: pointSize and pixelSize are mutually exclusive in QFont
+            font: {
+                var spec = {
+                    family: bar.fontFamily.length > 0 ? bar.fontFamily : Kirigami.Theme.defaultFont.family,
+                    bold: bar.fontBold
+                };
+                if (bar.fontPointSize > 0)
+                    spec.pointSize = bar.fontPointSize;
+                else
+                    spec.pixelSize = Math.max(8, Math.round(bar.height * 0.5));
+                return Qt.font(spec);
+            }
         }
     }
 }

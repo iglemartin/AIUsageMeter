@@ -11,6 +11,7 @@ ColumnLayout {
     property real util: -1               // -1 = no data
     property string countdownText: "—"
     property color accentColor: "#888888"
+    property string fontFamily: Kirigami.Theme.defaultFont.family
 
     spacing: Kirigami.Units.smallSpacing
     Layout.fillWidth: true
@@ -18,6 +19,7 @@ ColumnLayout {
     Kirigami.Heading {
         level: 5
         text: card.title
+        font.family: card.fontFamily
         Layout.alignment: Qt.AlignHCenter
         opacity: 0.85
     }
@@ -29,6 +31,7 @@ ColumnLayout {
         value: card.util < 0 ? 0 : card.util
         progressColor: card.accentColor
         textColor: Kirigami.Theme.textColor
+        fontFamily: card.fontFamily
         centerText: card.util < 0 ? "…" : Math.round(card.util) + "%"
     }
 
@@ -37,12 +40,14 @@ ColumnLayout {
         text: card.util < 0 ? i18n("no data")
                             : i18n("%1% free", Math.max(0, Math.round(100 - card.util)))
         font.bold: true
+        font.family: card.fontFamily
     }
 
     QQC2.Label {
         Layout.alignment: Qt.AlignHCenter
         text: i18n("Resets in %1", card.countdownText)
         opacity: 0.7
+        font.family: card.fontFamily
         font.pixelSize: Kirigami.Theme.smallFont.pixelSize
     }
 }

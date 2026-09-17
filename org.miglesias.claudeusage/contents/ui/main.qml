@@ -25,6 +25,11 @@ PlasmoidItem {
     readonly property string scriptPath:
         Qt.resolvedUrl("../code/usage.sh").toString().replace(/^file:\/\//, "")
 
+    // font chosen in the settings ("" = system font)
+    readonly property string fontFamily: Plasmoid.configuration.fontFamily.length > 0
+                                         ? Plasmoid.configuration.fontFamily
+                                         : Kirigami.Theme.defaultFont.family
+
     readonly property bool hasData: fiveHourUtil >= 0 || sevenDayUtil >= 0
 
     // metric shown in the panel
@@ -216,8 +221,31 @@ PlasmoidItem {
                 Plasmoid.configuration.panelMetric =
                     (Plasmoid.configuration.panelMetric === "seven_day") ? "five_hour" : "seven_day";
             }
+        },
+        PlasmaCore.Action {
+            isSeparator: true
+        },
+        PlasmaCore.Action {
+            text: i18n("About Claude Usage…")
+            icon.name: "help-about"
+            onTriggered: {
+                aboutLoader.active = true;
+                aboutLoader.item.show();
+                aboutLoader.item.raise();
+                aboutLoader.item.requestActivate();
+            }
         }
     ]
+
+    // created on demand and destroyed when closed
+    Loader {
+        id: aboutLoader
+        active: false
+        sourceComponent: AboutDialog {
+            metaData: Plasmoid.metaData
+            onClosing: aboutLoader.active = false
+        }
+    }
 
     // ---------------------- compact representation ----------------------
     compactRepresentation: MouseArea {
@@ -250,6 +278,9 @@ PlasmoidItem {
             value: root.panelUtil < 0 ? 0 : root.panelUtil
             progressColor: root.colorFor(root.panelUtil)
             textColor: Kirigami.Theme.textColor
+            fontFamily: Plasmoid.configuration.fontFamily
+            fontPointSize: Plasmoid.configuration.fontSize
+            fontBold: Plasmoid.configuration.fontBold
             centerText: root.panelUtil < 0
                         ? (root.lastError.length > 0 ? "!" : "…")
                         : (Plasmoid.configuration.showPercent ? Math.round(root.displayValue) : "")
@@ -265,6 +296,9 @@ PlasmoidItem {
             value: root.panelUtil < 0 ? 0 : root.panelUtil
             fillColor: root.colorFor(root.panelUtil)
             showBar: Plasmoid.configuration.showBar
+            fontFamily: Plasmoid.configuration.fontFamily
+            fontPointSize: Plasmoid.configuration.fontSize
+            fontBold: Plasmoid.configuration.fontBold
             label: {
                 root.tick; // recompute the countdown
                 if (root.panelUtil < 0)
@@ -295,6 +329,7 @@ PlasmoidItem {
             Layout.fillWidth: true
             Kirigami.Heading {
                 level: 2
+                font.family: root.fontFamily
                 text: i18n("Claude Usage")
             }
             Item { Layout.fillWidth: true }
@@ -328,6 +363,7 @@ PlasmoidItem {
             UsageCard {
                 Layout.fillWidth: true
                 title: i18n("Last 5 hours")
+                fontFamily: root.fontFamily
                 util: root.fiveHourUtil
                 accentColor: root.colorFor(root.fiveHourUtil)
                 countdownText: { root.tick; return root.fmtCountdown(root.fiveHourReset); }
@@ -338,6 +374,7 @@ PlasmoidItem {
             UsageCard {
                 Layout.fillWidth: true
                 title: i18n("Last 7 days")
+                fontFamily: root.fontFamily
                 util: root.sevenDayUtil
                 accentColor: root.colorFor(root.sevenDayUtil)
                 countdownText: { root.tick; return root.fmtCountdown(root.sevenDayReset); }
@@ -358,6 +395,7 @@ PlasmoidItem {
                    ? (root.errorIsTransient(root.lastError) ? Kirigami.Theme.neutralTextColor
                                                             : Kirigami.Theme.negativeTextColor)
                    : Kirigami.Theme.textColor
+            font.family: root.fontFamily
             font.pixelSize: Kirigami.Theme.smallFont.pixelSize
             text: {
                 root.tick;

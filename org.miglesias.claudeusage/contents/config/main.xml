@@ -55,5 +55,19 @@
             <label>Automatically renew the token and rewrite the credentials</label>
             <default>true</default>
         </entry>
+        <entry name="fontFamily" type="String">
+            <label>Font family for the widget text (empty = system default)</label>
+            <default></default>
+        </entry>
+        <entry name="fontSize" type="Int">
+            <label>Font size in points for the panel text (0 = automatic, fits the panel)</label>
+            <default>0</default>
+            <min>0</min>
+            <max>72</max>
+        </entry>
+        <entry name="fontBold" type="Bool">
+            <label>Use bold text in the panel</label>
+            <default>true</default>
+        </entry>
     </group>
 </kcfg>

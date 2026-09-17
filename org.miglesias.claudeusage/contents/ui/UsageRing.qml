@@ -1,4 +1,5 @@
 import QtQuick
+import org.kde.kirigami as Kirigami
 
 // Circular progress ring with optional text in the center.
 Item {
@@ -11,6 +12,9 @@ Item {
     property string centerText: ""
     property color textColor: progressColor
     property bool showText: true
+    property string fontFamily: ""               // "" = system font
+    property int fontPointSize: 0                // 0 = automatic (fits the ring)
+    property bool fontBold: true
 
     implicitWidth: 24
     implicitHeight: 24
@@ -57,8 +61,18 @@ Item {
         visible: ring.showText && text.length > 0
         text: ring.centerText
         color: ring.textColor
-        font.bold: true
-        font.pixelSize: Math.max(7, Math.min(ring.width, ring.height) * 0.32)
+        // single binding: pointSize and pixelSize are mutually exclusive in QFont
+        font: {
+            var spec = {
+                family: ring.fontFamily.length > 0 ? ring.fontFamily : Kirigami.Theme.defaultFont.family,
+                bold: ring.fontBold
+            };
+            if (ring.fontPointSize > 0)
+                spec.pointSize = ring.fontPointSize;
+            else
+                spec.pixelSize = Math.max(7, Math.round(Math.min(ring.width, ring.height) * 0.32));
+            return Qt.font(spec);
+        }
     }
 
     onValueChanged: canvas.requestPaint()

@@ -356,12 +356,22 @@ PlasmoidItem {
 
         // the two windows
         RowLayout {
+            id: cardsRow
             Layout.fillWidth: true
             Layout.fillHeight: true
             spacing: Kirigami.Units.largeSpacing
 
+            // both cards share the same width and stretch to fill the popup,
+            // so there is no leftover space and the separator stays centered
+            readonly property real cardWidth: Math.max(fiveHourCard.implicitWidth,
+                                                       sevenDayCard.implicitWidth)
+
             UsageCard {
+                id: fiveHourCard
                 Layout.fillWidth: true
+                Layout.minimumWidth: cardsRow.cardWidth
+                Layout.preferredWidth: cardsRow.cardWidth
+                Layout.maximumWidth: Number.POSITIVE_INFINITY
                 title: i18n("Last 5 hours")
                 fontFamily: root.fontFamily
                 util: root.fiveHourUtil
@@ -372,7 +382,11 @@ PlasmoidItem {
             Kirigami.Separator { Layout.fillHeight: true }
 
             UsageCard {
+                id: sevenDayCard
                 Layout.fillWidth: true
+                Layout.minimumWidth: cardsRow.cardWidth
+                Layout.preferredWidth: cardsRow.cardWidth
+                Layout.maximumWidth: Number.POSITIVE_INFINITY
                 title: i18n("Last 7 days")
                 fontFamily: root.fontFamily
                 util: root.sevenDayUtil

@@ -6,9 +6,9 @@
     <kcfgfile name=""/>
     <group name="General">
         <entry name="refreshInterval" type="Int">
-            <label>Refresh interval in seconds</label>
-            <default>300</default>
-            <min>30</min>
+            <label>How often to re-read the cached usage, in seconds</label>
+            <default>30</default>
+            <min>5</min>
             <max>3600</max>
         </entry>
         <entry name="panelMetric" type="String">
@@ -32,7 +32,7 @@
             <default>true</default>
         </entry>
         <entry name="useThresholdColors" type="Bool">
-            <label>Use threshold alert colors instead of Claude orange</label>
+            <label>Use threshold alert colors instead of the default orange</label>
             <default>false</default>
         </entry>
         <entry name="showRemaining" type="Bool">
@@ -50,10 +50,6 @@
             <default>90</default>
             <min>0</min>
             <max>100</max>
-        </entry>
-        <entry name="autoRefreshToken" type="Bool">
-            <label>Automatically renew the token and rewrite the credentials</label>
-            <default>true</default>
         </entry>
         <entry name="fontFamily" type="String">
             <label>Font family for the widget text (empty = system default)</label>

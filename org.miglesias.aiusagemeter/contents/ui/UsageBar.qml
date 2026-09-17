@@ -10,7 +10,7 @@ Item {
     id: bar
 
     property real value: 0                       // 0..100
-    property color fillColor: "#D97757"          // Claude's signature orange
+    property color fillColor: "#D97757"          // default accent orange
     property color trackColor: Qt.rgba(0.5, 0.5, 0.5, 0.30)
     property color textColor: Kirigami.Theme.textColor
     property string label: ""

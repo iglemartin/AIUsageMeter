@@ -8,13 +8,13 @@
             }
         ],
         "Category": "System Information",
-        "Description": "Shows your Claude account usage (5-hour and weekly limits) and the time until the next reset.",
+        "Description": "Shows your Claude Code usage (5-hour and weekly limits) and the time until the next reset, using the data Claude Code passes to its status line.",
         "Icon": "utilities-system-monitor",
-        "Id": "org.miglesias.claudeusage",
+        "Id": "org.miglesias.aiusagemeter",
         "License": "MIT",
-        "Name": "Claude Usage",
-        "Version": "1.1.0",
-        "Website": "https://github.com/iglemartin/ClaudeUsageWidget"
+        "Name": "AI Usage Meter",
+        "Version": "2.0.0",
+        "Website": "https://github.com/iglemartin/AIUsageMeter"
     },
     "X-Plasma-API-Minimum-Version": "6.0",
     "X-Plasma-MainScript": "ui/main.qml"

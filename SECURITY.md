@@ -1,7 +1,7 @@
 # Security Policy
 
-This widget handles your Claude OAuth token (read from `~/.claude/.credentials.json`),
-so security reports are very welcome.
+This widget edits your Claude Code settings and runs as your status line, so security
+reports are very welcome.
 
 ## Supported versions
 
@@ -18,15 +18,16 @@ Please **do not open a public issue**. Instead, use one of these private channel
 Include the steps to reproduce and the impact you observed. You can expect a first
 answer within a few days.
 
-## How the widget handles your token
+## What the widget touches
 
-- The token is read at runtime and is never stored in the repository or logged.
-- Tokens are never passed on a command line (where other local users could see them
-  with `ps`): they reach `curl` through stdin and `jq` through the environment.
-- Network calls go only to `https://api.anthropic.com` (HTTPS enforced; `~/.curlrc`
-  is ignored).
-- When token renewal is enabled, `~/.claude/.credentials.json` is rewritten
-  atomically with mode `600`, preserving the rest of the file, and a private backup
-  (`.credentials.json.widgetbak`, mode `600`) is kept. Renewal only happens once the
-  token has expired, and is skipped if another program updated the file meanwhile.
-- Renewal can be disabled in the settings (read-only mode).
+- **No credentials, no network.** The widget never reads your Claude token and makes no
+  network calls. Usage data comes from the `rate_limits` field that Claude Code passes to
+  its [status line](https://code.claude.com/docs/en/statusline).
+- `~/.claude/settings.json` is only modified when you click **Connect** or **Disconnect**:
+  the write is atomic, keeps every other setting and leaves a private backup
+  (`settings.json.widgetbak`, mode `600`).
+- If you had a status line, its command is stored in
+  `~/.config/ai-usage-meter/` (private directory) and run by the bridge with the same
+  input, so it keeps working; **Disconnect** restores it.
+- The cache `~/.cache/ai-usage-meter/usage.json` (private directory, mode `600`) only
+  holds the usage percentages, reset times and the time of the reading.

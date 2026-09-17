@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls as QQC2
 import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
+import org.kde.plasma.plasma5support as P5Support
 
 import "../code/links.js" as Links
 
@@ -12,7 +13,6 @@ Kirigami.FormLayout {
     property alias cfg_showRemaining: remainingCheck.checked
     property alias cfg_warnThreshold: warnSpin.value
     property alias cfg_critThreshold: critSpin.value
-    property alias cfg_autoRefreshToken: refreshTokenCheck.checked
     property alias cfg_useThresholdColors: thresholdCheck.checked
     property alias cfg_showBar: showBarCheck.checked
     property alias cfg_showPercent: showPercentCheck.checked
@@ -28,12 +28,84 @@ Kirigami.FormLayout {
     property string cfg_fontFamily
     property string cfg_fontFamilyDefault: ""
 
+    // ------------------- Claude Code connection -------------------
+    // null = unknown yet
+    property var claudeConnected: null
+    property string claudeError: ""
+    readonly property string helperPath:
+        Qt.resolvedUrl("../code/helper.sh").toString().replace(/^file:\/\//, "")
+
+    P5Support.DataSource {
+        id: helper
+        engine: "executable"
+        connectedSources: []
+        onNewData: function (sourceName, data) {
+            helper.disconnectSource(sourceName);
+            try {
+                var obj = JSON.parse((data["stdout"] || "").trim());
+                page.claudeError = obj.error || "";
+                if (obj.connected !== undefined)
+                    page.claudeConnected = obj.connected;
+            } catch (e) {
+                page.claudeError = "parse";
+            }
+        }
+        function run(action) {
+            connectSource("/bin/sh '" + page.helperPath + "' " + action);
+        }
+    }
+
+    Component.onCompleted: helper.run("status")
+
+    RowLayout {
+        Kirigami.FormData.label: i18n("Claude Code:")
+        spacing: Kirigami.Units.smallSpacing
+
+        Kirigami.Icon {
+            Layout.preferredWidth: Kirigami.Units.iconSizes.small
+            Layout.preferredHeight: Kirigami.Units.iconSizes.small
+            source: page.claudeConnected ? "emblem-success" : "emblem-warning"
+            visible: page.claudeConnected !== null
+        }
+        QQC2.Label {
+            text: page.claudeConnected === null ? i18n("Checking…")
+                  : page.claudeConnected ? i18n("Connected")
+                  : i18n("Not connected")
+        }
+        QQC2.Button {
+            enabled: page.claudeConnected !== null
+            text: page.claudeConnected ? i18n("Disconnect") : i18n("Connect")
+            icon.name: page.claudeConnected ? "network-disconnect" : "network-connect"
+            onClicked: helper.run(page.claudeConnected ? "disconnect" : "connect")
+        }
+    }
+
+    QQC2.Label {
+        Layout.fillWidth: true
+        Layout.maximumWidth: Kirigami.Units.gridUnit * 22
+        wrapMode: Text.WordWrap
+        visible: page.claudeError.length > 0
+        color: Kirigami.Theme.negativeTextColor
+        text: i18n("Couldn't update ~/.claude/settings.json (%1).", page.claudeError)
+    }
+
+    QQC2.Label {
+        Layout.fillWidth: true
+        Layout.maximumWidth: Kirigami.Units.gridUnit * 22
+        wrapMode: Text.WordWrap
+        opacity: 0.7
+        font.pixelSize: Kirigami.Theme.smallFont.pixelSize
+        text: i18n("The widget gets your usage from Claude Code's status line, the documented way: no tokens and no network access. Connecting sets it in ~/.claude/settings.json (with a backup); if you already had a status line it keeps showing, and disconnecting restores it. Readings update while you use Claude Code.")
+    }
+
+    Item { Kirigami.FormData.isSection: true }
+
     QQC2.SpinBox {
         id: refreshSpin
-        Kirigami.FormData.label: i18n("Refresh every:")
-        from: 30
+        Kirigami.FormData.label: i18n("Re-read every:")
+        from: 5
         to: 3600
-        stepSize: 30
+        stepSize: 5
         textFromValue: function (value) { return i18n("%1 s", value); }
         valueFromText: function (text) { return parseInt(text); }
     }
@@ -145,7 +217,7 @@ Kirigami.FormLayout {
     QQC2.CheckBox {
         id: thresholdCheck
         Kirigami.FormData.label: i18n("Color:")
-        text: i18n("Use alert colors (green/amber/red) instead of Claude orange")
+        text: i18n("Use alert colors (green/amber/red) instead of the default orange")
     }
 
     QQC2.SpinBox {
@@ -170,22 +242,6 @@ Kirigami.FormLayout {
         valueFromText: function (text) { return parseInt(text); }
     }
 
-    Item { Kirigami.FormData.isSection: true }
-
-    QQC2.CheckBox {
-        id: refreshTokenCheck
-        Kirigami.FormData.label: i18n("Session:")
-        text: i18n("Automatically renew the token when it expires")
-    }
-
-    QQC2.Label {
-        Layout.fillWidth: true
-        Layout.maximumWidth: Kirigami.Units.gridUnit * 22
-        wrapMode: Text.WordWrap
-        opacity: 0.7
-        font.pixelSize: Kirigami.Theme.smallFont.pixelSize
-        text: i18n("Renewing rewrites ~/.claude/.credentials.json atomically (with a .widgetbak backup), preserving the rest. If disabled, the widget only reads the token and will show a notice when it expires.")
-    }
 
     Item { Kirigami.FormData.isSection: true }
 

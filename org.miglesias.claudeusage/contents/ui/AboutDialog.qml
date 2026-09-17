@@ -4,6 +4,8 @@ import QtQuick.Layouts
 import QtQuick.Controls as QQC2
 import org.kde.kirigami as Kirigami
 
+import "../code/links.js" as Links
+
 // "About" window: name, version, description, author, license and website,
 // taken from the plasmoid's metadata.json (passed in as `metaData`).
 Window {
@@ -18,7 +20,7 @@ Window {
             if (authors[i].name)
                 names.push(authors[i].name);
         }
-        return names.join(", ");
+        return names.length > 0 ? names.join(", ") : Links.AUTHOR_NAME;
     }
 
     title: i18n("About %1", metaData ? metaData.name : "")
@@ -112,6 +114,16 @@ Window {
             QQC2.Label {
                 Layout.alignment: Qt.AlignRight
                 opacity: 0.7
+                text: i18n("Email:")
+            }
+            Kirigami.UrlButton {
+                url: "mailto:" + Links.AUTHOR_EMAIL
+                text: Links.AUTHOR_EMAIL
+            }
+
+            QQC2.Label {
+                Layout.alignment: Qt.AlignRight
+                opacity: 0.7
                 text: i18n("License:")
             }
             QQC2.Label {
@@ -131,10 +143,26 @@ Window {
             }
         }
 
-        QQC2.DialogButtonBox {
+        RowLayout {
             Layout.fillWidth: true
-            standardButtons: QQC2.DialogButtonBox.Close
-            onRejected: dialog.close()
+            Layout.topMargin: Kirigami.Units.largeSpacing
+
+            QQC2.Button {
+                text: i18n("Buy me a coffee")
+                icon.name: "help-donate"
+                QQC2.ToolTip.text: Links.DONATE_URL
+                QQC2.ToolTip.visible: hovered
+                QQC2.ToolTip.delay: Kirigami.Units.toolTipDelay
+                onClicked: Qt.openUrlExternally(Links.DONATE_URL)
+            }
+
+            Item { Layout.fillWidth: true }
+
+            QQC2.Button {
+                text: i18n("Close")
+                icon.name: "window-close"
+                onClicked: dialog.close()
+            }
         }
     }
 }

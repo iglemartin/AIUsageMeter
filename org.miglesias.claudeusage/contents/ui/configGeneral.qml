@@ -3,6 +3,8 @@ import QtQuick.Controls as QQC2
 import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
 
+import "../code/links.js" as Links
+
 Kirigami.FormLayout {
     id: page
 
@@ -183,5 +185,23 @@ Kirigami.FormLayout {
         opacity: 0.7
         font.pixelSize: Kirigami.Theme.smallFont.pixelSize
         text: i18n("Renewing rewrites ~/.claude/.credentials.json atomically (with a .widgetbak backup), preserving the rest. If disabled, the widget only reads the token and will show a notice when it expires.")
+    }
+
+    Item { Kirigami.FormData.isSection: true }
+
+    QQC2.Button {
+        Kirigami.FormData.label: i18n("Support:")
+        text: i18n("Buy me a coffee")
+        icon.name: "help-donate"
+        onClicked: Qt.openUrlExternally(Links.DONATE_URL)
+    }
+
+    QQC2.Label {
+        Layout.fillWidth: true
+        Layout.maximumWidth: Kirigami.Units.gridUnit * 22
+        wrapMode: Text.WordWrap
+        opacity: 0.7
+        font.pixelSize: Kirigami.Theme.smallFont.pixelSize
+        text: i18n("If you find this widget useful, you can support its development. Contact: %1", Links.AUTHOR_EMAIL)
     }
 }
